@@ -16,6 +16,7 @@ import logging
 import time
 import drive_interface
 import box_interface
+import progress_bar
 
 from oauth2client import tools
 
