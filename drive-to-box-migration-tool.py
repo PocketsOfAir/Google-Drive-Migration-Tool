@@ -89,7 +89,7 @@ def migrate_metadata(box, drive, print_details=False, print_file=None, logger=No
     """
 
     if logger:
-        logger.debug('Matching files between Drive:/{0} and Box:/{1}'.format(drive.root, box.path))
+        logger.debug('Matching files between Drive: {0} and Box: {1}'.format(drive.root, box.root_directory))
 
     matched_files = []
     existing_metadata_files = []
@@ -219,7 +219,11 @@ if __name__ == '__main__':
     timestr = time.strftime("%Y%m%d-%H%M%S")
     if not os.path.exists('logs'):
         os.makedirs('logs')
-    logging.basicConfig(handlers=[logging.FileHandler('logs/'+timestr+'.log', 'w', 'utf-8')], level=logging.DEBUG)
+
+    logging.basicConfig(handlers=[logging.FileHandler('logs/'+timestr+'.log', 'w', 'utf-8')],
+                        level=logging.DEBUG,
+                        format='%(asctime)s %(levelname)s %(message)s')
+
     # Suppress all the google error messages
     logging.getLogger('googleapiclient').setLevel(logging.CRITICAL)
     logging.getLogger('oauth2client.transport').setLevel(logging.CRITICAL)
@@ -298,7 +302,8 @@ if __name__ == '__main__':
                          drive=src_drive,
                          print_details=args.printall,
                          print_file=output_file,
-                         test_only=args.testmigrate)
+                         test_only=args.testmigrate,
+                         logger=logging)
         logging.info('Migration complete.')
 
     elif args.checkmetadata:
